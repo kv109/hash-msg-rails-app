@@ -1,0 +1,8 @@
+.row
+  .col-lg-10.col-lg-offset-2
+    = form_for(@encrypted_message, url: decrypted_message_path) do |f|
+      .form-group.row
+        .col-xs-10
+          = f.label :password, @encrypted_message.question ? @encrypted_message.question : 'Password'
+          = f.password_field :password, required: true, class: 'form-control', autofocus: true
+      button.btn.btn-success type="submit" Submit

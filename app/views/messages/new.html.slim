@@ -1,0 +1,26 @@
+.row
+  .col-lg-10.col-lg-offset-2
+    = form_for @encrypted_message_create_form, url: messages_path do |f|
+
+      -if @encrypted_message_create_form.errors.present?
+        .row
+          .col-lg-10
+            #error_explanation
+              h2 Error!
+              ul
+                - @encrypted_message_create_form.errors.full_messages.each do |msg|
+                  li= msg
+
+      .form-group.row.required
+        .col-xs-10
+          = f.label :decrypted_content, 'Message', class: 'control-label'
+          = f.text_area :decrypted_content, required: true, class: 'form-control', rows: 5, autofocus: true
+      .form-group.row.required
+        .col-xs-10
+          = f.label :password, class: 'control-label'
+          = f.password_field :password, required: true, class: 'form-control'
+      .form-group.row
+        .col-xs-10
+          = f.label :question
+          = f.text_field :question, class: 'form-control'
+      button.btn.btn-success type="submit" Submit
