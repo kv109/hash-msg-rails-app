@@ -5,35 +5,43 @@ class EncryptedMessage
 
   attr_accessor :encrypted_content, :question, :uuid
 
-  delegate :cipher, :storage, to: :class
-
   validates! :encrypted_content, presence: true
 
-  def self.cipher
-    AES
-  end
-
-  def self.construct_from_hash(hash)
-    EncryptedMessage.new(
+  class << self
+    def construct_from_hash(hash)
+      EncryptedMessage.new(
         encrypted_content: hash.fetch('encrypted_content'),
         question: hash.fetch('question')
-    )
+      )
+    end
+
+    def destroy(uuid)
+      storage.del(uuid)
+    end
+
+    def find(uuid)
+      json = storage.get(uuid)
+      return nil unless json
+      construct_from_hash(JSON.parse(json))
+    end
+
+    private
+
+    def cipher
+      AES
+    end
+
+    def storage
+      RedisHM
+    end
   end
 
-  def self.find(uuid)
-    json = storage.get(uuid)
-    return nil unless json
-    construct_from_hash(JSON.parse(json))
+  def cipher
+    self.class.send :cipher
   end
 
-  def self.find_and_destroy(uuid)
-    encrypted_message = find(uuid)
-    storage.del(uuid)
-    encrypted_message
-  end
-
-  def self.storage
-    RedisHM
+  def decrypted_content(password)
+    cipher.decrypt(encrypted_content, password)
   end
 
   def to_json
@@ -45,7 +53,9 @@ class EncryptedMessage
     storage.set(self.uuid, self.to_json)
   end
 
-  def decrypted_content(password)
-    cipher.decrypt(encrypted_content, password)
+  private
+
+  def storage
+    self.class.send :storage
   end
 end

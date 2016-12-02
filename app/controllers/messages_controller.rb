@@ -19,12 +19,16 @@ class MessagesController < ApplicationController
   end
 
   def show_decrypted
-    encrypted_message = EncryptedMessage.find_and_destroy(params.fetch(:uuid))
-    if encrypted_message
-      @decrypted_content = encrypted_message && encrypted_message.decrypted_content(encrypted_message_params.fetch(:password))
-    end
-  rescue OpenSSL::Cipher::CipherError => e
-    render plain: 'Could not decrypt message (wrong password?)'
+    operation = EncryptedMessage::DecryptAndDestroyOperation.new(
+      encrypted_message_uuid: params.fetch(:uuid),
+      password:               encrypted_message_params.fetch(:password)
+    )
+
+    operation
+      .on(:error) { |error_messages| @error_message = error_messages.join(', ') }
+      .on(:not_found) { @decrypted_content = nil }
+      .on(:ok) { |decrypted_content| @decrypted_content = decrypted_content }
+      .call
   end
 
   private

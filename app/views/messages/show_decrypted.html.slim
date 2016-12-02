@@ -1,12 +1,19 @@
-- if @decrypted_content
-  .row
-    .col-lg-12
-       h6 Your decrypted message:
-       pre.top30 = @decrypted_content
-       h6.top30
-        | This message has already been deleted from our database. This is the last time you can see it.
-- else
+- if @error_message
   .col-lg-12
-    h5 Message not found.
-    h6 - It could expire.
-    h6 - Somebody already saw it, so it was deleted.
+    h5
+      = @error_message
+
+- else
+  - if @decrypted_content
+    .row
+      .col-lg-12
+        h6 Your decrypted message:
+        pre.top30 = @decrypted_content
+        h6.top30
+          | This message has already been deleted from our database. This is the last time you can see it.
+
+  - else
+    .col-lg-12
+      h5 Message not found.
+      h6 - It could expire.
+      h6 - Somebody already saw it, so it was deleted.
