@@ -14,6 +14,7 @@ RSpec.configure do |config|
 
   if ENV_SELENIUM_HOST
     Capybara.javascript_driver = :selenium_remote_firefox
+    Capybara.default_max_wait_time = 1.second
     Capybara.register_driver :selenium_remote_firefox do |app|
       Capybara::Selenium::Driver.new(
           app,

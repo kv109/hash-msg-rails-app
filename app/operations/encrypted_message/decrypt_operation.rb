@@ -1,7 +1,7 @@
 class EncryptedMessage::DecryptOperation
-  attr_reader :encrypted_message_uuid, :password
+  require 'aes'
 
-  include Wisper::Publisher
+  attr_reader :encrypted_message_uuid, :password
 
   def initialize(encrypted_message_uuid:, password:)
     @encrypted_message_uuid = encrypted_message_uuid
@@ -10,28 +10,26 @@ class EncryptedMessage::DecryptOperation
 
   def call
     if encrypted_message.nil?
-      return broadcast(:not_found, encrypted_message_uuid)
+      return Op::Response.new(status: :not_found, value: encrypted_message_uuid)
     end
 
     begin
       content = decrypted_content
     rescue OpenSSL::Cipher::CipherError => e
-      return broadcast(:error, [e.message])
+      return Op::Response.new(status: :error, messages: [e.message])
     end
 
-    return broadcast(:ok, content)
+    return Op::Response.new(status: :ok, value: content)
   end
 
   private
 
   def decrypted_content
-    @decrypted_content ||=
-      encrypted_message.decrypted_content(password)
+    key = password + Rails.application.secrets.fetch(:secret_key_base)
+    AES.decrypt(encrypted_message.encrypted_content, key)
   end
 
   def encrypted_message
-    @encrypted_message ||=
-      EncryptedMessage.find(encrypted_message_uuid)
+    EncryptedMessage.find(encrypted_message_uuid)
   end
 end
-

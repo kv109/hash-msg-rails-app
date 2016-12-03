@@ -1,5 +1,3 @@
-require 'aes'
-
 class EncryptedMessage
   include ActiveModel::Model
 
@@ -27,21 +25,9 @@ class EncryptedMessage
 
     private
 
-    def cipher
-      AES
-    end
-
     def storage
       RedisHM
     end
-  end
-
-  def cipher
-    self.class.send :cipher
-  end
-
-  def decrypted_content(password)
-    cipher.decrypt(encrypted_content, password)
   end
 
   def to_json

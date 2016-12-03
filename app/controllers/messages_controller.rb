@@ -5,11 +5,12 @@ class MessagesController < ApplicationController
 
   def create
     @encrypted_message_create_form = EncryptedMessage::CreateForm.new(create_params)
-    if @encrypted_message_create_form.valid?
-      @encrypted_message = EncryptedMessage::Builder.build_from_create_form(@encrypted_message_create_form)
-      @encrypted_message.save
-      redirect_to encrypted_message_path(@encrypted_message.uuid)
-    else
+    operation = EncryptedMessage::Create::FromCreateFormOperation.new(form: @encrypted_message_create_form)
+    response = operation.call
+
+    response.ok do |encrypted_message|
+      redirect_to encrypted_message_path(encrypted_message.uuid)
+    end.error do
       render :new
     end
   end
@@ -23,12 +24,13 @@ class MessagesController < ApplicationController
       encrypted_message_uuid: params.fetch(:uuid),
       password:               encrypted_message_params.fetch(:password)
     )
+    response = operation.call
 
-    operation
-      .on(:error) { |error_messages| @error_message = error_messages.join(', ') }
-      .on(:not_found) { @decrypted_content = nil }
-      .on(:ok) { |decrypted_content| @decrypted_content = decrypted_content }
-      .call
+    response.ok do |decrypted_content|
+      @decrypted_content = decrypted_content
+    end.error do |value, messages|
+      @error_message = messages.join(', ')
+    end
   end
 
   private
