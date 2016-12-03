@@ -14,12 +14,15 @@ RSpec.configure do |config|
 
   if ENV_SELENIUM_HOST
     Capybara.javascript_driver = :selenium_remote_firefox
-    Capybara.register_driver "selenium_remote_firefox".to_sym do |app|
+    Capybara.register_driver :selenium_remote_firefox do |app|
       Capybara::Selenium::Driver.new(
           app,
           browser: :remote,
           url: "http://#{ENV_SELENIUM_HOST}:4444/wd/hub",
           desired_capabilities: :firefox)
+    end
+    Capybara::Screenshot.register_driver :selenium_remote_firefox do |driver, path|
+      driver.browser.save_screenshot path
     end
   end
 
