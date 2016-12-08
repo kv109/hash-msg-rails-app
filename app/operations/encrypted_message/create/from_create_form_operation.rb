@@ -7,6 +7,10 @@ class EncryptedMessage::Create::FromCreateFormOperation
 
 
   def call
+    if !form.valid?
+      return Op::Response.new(status: :error, messages: form.errors.full_messages, value: form)
+    end
+
     operation = EncryptedMessage::EncryptOperation.new(
       decrypted_content: form.decrypted_content,
       password: form.password

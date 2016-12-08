@@ -16,7 +16,8 @@ class EncryptedMessage::DecryptOperation
     begin
       content = decrypted_content
     rescue OpenSSL::Cipher::CipherError => e
-      return Op::Response.new(status: :error, messages: [e.message])
+      message = e.message == 'bad decrypt' ? 'wrong password' : e.message
+      return Op::Response.new(status: :error, messages: [message])
     end
 
     return Op::Response.new(status: :ok, value: content)
