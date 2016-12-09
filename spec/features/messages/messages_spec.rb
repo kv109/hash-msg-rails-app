@@ -3,41 +3,58 @@ feature 'Messages' do
   scenario 'Create message', js: true do
     # With correct password
     visit root_path
-    fill_in 'Message', with: 'Foobar'
-    fill_in 'Password', with: 'password'
-    click_button 'Submit'
-    fill_in 'Password', with: 'password'
-    click_button 'Submit'
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: 'password'
+      click_button 'Submit'
+    end
+    within decrypt_form do
+      fill_in 'Password', with: 'password'
+      click_button 'Submit'
+    end
     expect(page).to have_selector('pre', text: 'Foobar')
 
     # With wrong password
     visit root_path
-    fill_in 'Message', with: 'Foobar'
-    fill_in 'Password', with: 'password'
-    click_button 'Submit'
-    fill_in 'Password', with: 'WRONG PASSWORD'
-    click_button 'Submit'
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: 'password'
+      click_button 'Submit'
+    end
+    within decrypt_form do
+      fill_in 'Password', with: 'WRONG PASSWORD'
+      click_button 'Submit'
+    end
     expect(page).to have_selector('h5', text: 'wrong password')
 
     # With blank message
     visit root_path
-    fill_in 'Message', with: ''
-    fill_in 'Password', with: 'password'
-    click_button 'Submit'
-    expect_error("Message can't be blank")
+    within create_form do
+      fill_in 'Message', with: ''
+      fill_in 'Password', with: 'password'
+      click_button 'Submit'
+    end
+    expect_html5_validation_to_prevent_submit
 
     # With password with less than 6 characters
     visit root_path
-    fill_in 'Message', with: 'Foobar'
-    fill_in 'Password', with: '12345'
-    click_button 'Submit'
-    expect_error('Password is too short (minimum is 6 characters)')
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: '12345'
+      click_button 'Submit'
+    end
+    expect_html5_validation_to_prevent_submit
   end
 
-  def expect_error(message)
-    within 'form' do
-      expect(page).to have_selector('#error_explanation', text: 'Error!')
-      expect(page).to have_selector('li', text: message)
-    end
+  def create_form
+    '#new_encrypted_message_create_form'
+  end
+
+  def decrypt_form
+    '#decrypt_encrypted_message_form'
+  end
+
+  def expect_html5_validation_to_prevent_submit
+    expect(current_path).to eql root_path
   end
 end
