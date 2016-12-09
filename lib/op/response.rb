@@ -55,6 +55,12 @@ class Op::Response
   end
 
   def validate_messages
-    true
+    messages.each(&method(:validate_message))
+  end
+
+  def validate_message(message)
+    error = Op::Response::InvalidMessageError.new(message)
+    raise error unless message.is_a?(String)
+    raise error if message.size < 1
   end
 end
