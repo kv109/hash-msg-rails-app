@@ -55,6 +55,6 @@ feature 'Messages' do
   end
 
   def expect_html5_validation_to_prevent_submit
-    expect(current_path).to eql 'FOOBAR'
+    expect(current_path).to eql root_path
   end
 end
