@@ -1,17 +1,20 @@
 class Op::Response
-  STATUSES = %i(ok error).freeze; private_constant :STATUSES
+  require_relative 'response/response_errors'
 
-  STATUSES_MAP = {
-    true => :ok,
-    false => :error
-  }.freeze; private_constant :STATUSES_MAP
+  STATUSES = %i(error ok).freeze; private_constant :STATUSES
 
   attr_reader :messages, :status, :value
 
   def initialize(messages: [], status:, value: nil)
     @messages = messages
-    @status = build_status(status)
+    @status = status
     @value = value
+
+    validate_messages
+    validate_status
+    validate_value
+
+    normalize_status
   end
 
   def error(&block)
@@ -33,16 +36,25 @@ class Op::Response
   end
 
   def error?; status == :error end
-  def not_found?; status == :not_found end
   def ok?; status == :ok end
 
   private
 
-  def build_status(status)
-    status = STATUSES_MAP[status] || status
-    unless status.in? STATUSES
-      raise "Invalid status (status=#{status}, has to be in [#{STATUSES.join(', ')}])"
-    end
-    status
+  def normalize_status
+    @status = @status.to_sym
+  end
+
+  def validate_value
+    true
+  end
+
+  def validate_status
+    error = Op::Response::InvalidStatusError.new(status, STATUSES)
+    raise error unless status.class.in?([String, Symbol])
+    raise error unless status.to_sym.in?(STATUSES)
+  end
+
+  def validate_messages
+    true
   end
 end
