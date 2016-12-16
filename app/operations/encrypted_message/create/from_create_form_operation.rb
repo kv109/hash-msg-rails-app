@@ -5,10 +5,9 @@ class EncryptedMessage::Create::FromCreateFormOperation
     @form = form
   end
 
-
   def call
     if !form.valid?
-      return Op::Response.new(status: :error, messages: form.errors.full_messages, value: form)
+      return Coman::Response.error(messages: form.errors.full_messages, result: form)
     end
 
     operation = EncryptedMessage::EncryptOperation.new(
@@ -19,15 +18,15 @@ class EncryptedMessage::Create::FromCreateFormOperation
     response = operation.call
 
     if response.ok?
-      encrypted_content = response.value
+      encrypted_content = response.result
       encrypted_message = EncryptedMessage.new(
         encrypted_content: encrypted_content,
         question:          form.question
       )
       if encrypted_message.save
-        Op::Response.new(status: :ok, value: encrypted_message)
+        Coman::Response.ok(result: encrypted_message)
       else
-        Op::Response.new(status: :error, value: encrypted_message, messages: encrypted_message.errors.full_messages)
+        Coman::Response.error(result: encrypted_message, messages: encrypted_message.errors.full_messages)
       end
     elsif response.error?
       response

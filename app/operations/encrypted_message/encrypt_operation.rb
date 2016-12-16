@@ -10,7 +10,7 @@ class EncryptedMessage::EncryptOperation
 
   def call
     encrypted_content = AES.encrypt(decrypted_content, key)
-    return Op::Response.new(status: :ok, value: encrypted_content)
+    Coman::Response.ok(result: encrypted_content)
   end
 
   private

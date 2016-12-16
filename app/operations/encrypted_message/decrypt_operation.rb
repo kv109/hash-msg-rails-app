@@ -10,17 +10,17 @@ class EncryptedMessage::DecryptOperation
 
   def call
     if encrypted_message.nil?
-      return Op::Response.new(status: :not_found, value: encrypted_message_uuid)
+      return Coman::Response.error(code: 404, result: encrypted_message_uuid)
     end
 
     begin
       content = decrypted_content
     rescue OpenSSL::Cipher::CipherError => e
       message = e.message == 'bad decrypt' ? 'wrong password' : e.message
-      return Op::Response.new(status: :error, messages: [message])
+      return Coman::Response.error(messages: [message])
     end
 
-    return Op::Response.new(status: :ok, value: content)
+    Coman::Response.ok(result: content)
   end
 
   private

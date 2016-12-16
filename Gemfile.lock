@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/kv109/coman
+  revision: 3e57d1ad917f7209e77359b39a9c92ab2dfa4711
+  specs:
+    coman (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -245,6 +251,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   coffee-rails (~> 4.2)
+  coman!
   database_cleaner
   factory_girl_rails
   faker

@@ -26,9 +26,14 @@ class MessagesController < ApplicationController
     )
     response = operation.call
 
-    response.ok do |decrypted_content|
+    response
+    .ok do |decrypted_content|
       @decrypted_content = decrypted_content
-    end.error do |value, messages|
+    end
+    .error(404) do
+      @decrypted_content = nil
+    end
+    .error do |value, messages|
       @error_message = messages.join(', ')
     end
   end
