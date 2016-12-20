@@ -10,7 +10,7 @@ class EncryptedMessage::Create::FromCreateFormOperation
       return Coman::Response.error(messages: form.errors.full_messages, result: form)
     end
 
-    operation = EncryptedMessage::EncryptOperation.new(
+    operation = EncryptOperation.new(
       decrypted_content: form.decrypted_content,
       password: form.password
     )

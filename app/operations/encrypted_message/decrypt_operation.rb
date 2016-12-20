@@ -1,6 +1,4 @@
 class EncryptedMessage::DecryptOperation
-  require 'aes'
-
   attr_reader :encrypted_message_uuid, :password
 
   def initialize(encrypted_message_uuid:, password:)
@@ -13,21 +11,18 @@ class EncryptedMessage::DecryptOperation
       return Coman::Response.error(code: 404, result: encrypted_message_uuid)
     end
 
-    begin
-      content = decrypted_content
-    rescue OpenSSL::Cipher::CipherError => e
-      message = e.message == 'bad decrypt' ? 'wrong password' : e.message
-      return Coman::Response.error(messages: [message])
+    content = decrypted_content
+    if content.nil?
+      return Coman::Response.error(messages: ['wrong password'])
+    else
+      Coman::Response.ok(result: content)
     end
-
-    Coman::Response.ok(result: content)
   end
 
   private
 
   def decrypted_content
-    key = password + Rails.application.secrets.fetch(:secret_key_base)
-    AES.decrypt(encrypted_message.encrypted_content, key)
+    Cipher.decrypt(encrypted_content: encrypted_message.encrypted_content, password: password)
   end
 
   def encrypted_message
