@@ -3,7 +3,6 @@ ruby '2.3.3'
 
 gem 'coman', git: 'https://github.com/kv109/coman'
 
-gem 'aes'
 gem 'binding_of_caller' # to make better_errors work
 gem 'bootstrap-sass'
 gem 'coffee-rails', '~> 4.2'

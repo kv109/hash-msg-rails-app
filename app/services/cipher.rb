@@ -1,24 +1,28 @@
 class Cipher
-  require 'aes'
-
   class << self
     def decrypt(encrypted_content:, password:)
-      key = generate_key(password: password)
-      AES.decrypt(encrypted_content, key)
-    rescue OpenSSL::Cipher::CipherError => e
-      Rails.logger.warn(e.inspect)
-      nil
+      cipher = cipher()
+      cipher.decrypt
+      cipher.key = generate_key(password: password)
+      cipher.update(encrypted_content) + cipher.final
     end
 
+
     def encrypt(decrypted_content:, password:)
-      key = generate_key(password: password)
-      AES.encrypt(decrypted_content, key)
+      cipher = cipher()
+      cipher.encrypt
+      cipher.key = generate_key(password: password)
+      cipher.update(decrypted_content) + cipher.final
     end
 
     private
 
+    def cipher
+      OpenSSL::Cipher::AES.new(128, :CBC)
+    end
+
     def generate_key(password:)
-      password + Rails.application.secrets.fetch(:secret_key_base)
+      "#{password}#{Rails.application.secrets.fetch(:secret_key_base)}"[0..50]
     end
   end
 end

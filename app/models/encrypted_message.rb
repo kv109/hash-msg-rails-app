@@ -7,9 +7,10 @@ class EncryptedMessage
 
   class << self
     def construct_from_hash(hash)
+      encrypted_content = Base64.decode64(hash.fetch('encrypted_content'))
       EncryptedMessage.new(
-        encrypted_content: hash.fetch('encrypted_content'),
-        question: hash.fetch('question')
+        encrypted_content: encrypted_content,
+        question:          hash.fetch('question')
       )
     end
 
@@ -31,7 +32,10 @@ class EncryptedMessage
   end
 
   def to_json
-    { encrypted_content: encrypted_content, question: question }.to_json
+    {
+      encrypted_content: Base64.encode64(encrypted_content),
+      question: question
+    }.to_json
   end
 
   def save
