@@ -4,15 +4,9 @@ RSpec.describe Cipher do
   CHARS = ALPHANUMERIC_CHARS + NON_ALPHANUMERIC_CHARS + (0..255).map {|n| "" <<n }
 
   describe '#decrypt' do
-    let(:contents_and_passwords) do
-      contents_and_passwords = []
-      passwords = [
-        'password',
-        '   ',
-        '(*&^@#$)',
-        '111',
-      ]
-      contents = [
+    let(:contents) do
+      contents = []
+      contents += [
         ' ',
         '   ',
         'a',
@@ -27,6 +21,11 @@ RSpec.describe Cipher do
         'Very important message.',
         'Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message.',
       ]
+    end
+
+    let(:contents_and_passwords) do
+      contents_and_passwords = []
+
       passwords.each do |password|
         contents.each do |content|
           contents_and_passwords << [content, password]
@@ -34,6 +33,21 @@ RSpec.describe Cipher do
       end
 
       contents_and_passwords
+    end
+
+    let(:passwords) do
+      passwords = []
+      # random_passwords = [3, 5, 10, 50, 200].map { |n| Base64.encode64((0...n).map { (rand(255)).chr }.join) }
+      random_passwords = [3, 5, 10, 15, 50, 200].map { |n| ((0...n).map { (65+rand(26)).chr }.join) }
+      passwords += random_passwords
+      passwords += [
+        'password',
+        ' ',
+        '     ',
+        '(*&^@#$)',
+        '111',
+        'Sentences makes great passwords'
+      ]
     end
 
     context 'with valid password' do
@@ -62,11 +76,26 @@ RSpec.describe Cipher do
       end
 
       context 'with one char added at the end' do
-        it 'fails to decrypt' do
-          contents_and_passwords.each do |content, password|
-            CHARS.each do |char|
-              invalid_password = password + char
-              expect_decryption_failure(content, password, invalid_password)
+        context 'with password with less than 15 chars' do
+          it 'fails to decrypt' do
+            contents_and_passwords.each do |content, password|
+              next if password.length > 14
+              CHARS.each do |char|
+                invalid_password = password + char
+                expect_decryption_failure(content, password, invalid_password)
+              end
+            end
+          end
+        end
+
+        context 'with password with at least 15 chars' do
+          xit 'fails to decrypt' do
+            contents_and_passwords.each do |content, password|
+              next if password.length < 15
+              CHARS.each do |char|
+                invalid_password = password + char
+                expect_decryption_failure(content, password, invalid_password)
+              end
             end
           end
         end
@@ -97,6 +126,6 @@ RSpec.describe Cipher do
       rescue OpenSSL::Cipher::CipherError
         nil
       end
-    ).to_not eql decrypted_content
+    ).to_not eql(decrypted_content), "valid password: [#{valid_password}](length=#{valid_password.length}), used password: [#{invalid_password}](length=#{invalid_password.length}), content: [#{decrypted_content}]"
   end
 end
