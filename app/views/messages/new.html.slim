@@ -14,11 +14,21 @@
       .form-group.row.required
         .col-xs-10
           = f.label :decrypted_content, 'Message', class: 'control-label'
-          = f.text_area :decrypted_content, autofocus: true, class: 'form-control', required: true, rows: 5
+          = f.text_area :decrypted_content,
+                  autofocus: true,
+                  class: 'form-control',
+                  pattern: '.{6,}',
+                  required: true,
+                  rows: 5,
+                  title: 'at least 6 characters'
       .form-group.row.required
         .col-xs-10
           = f.label :password, 'Password (at least 6 characters)', class: 'control-label'
-          = f.password_field :password, class: 'form-control', pattern: '.{6,}', required: true, title: 'at least 6 characters'
+          = f.password_field :password,
+                  class: 'form-control',
+                  pattern: '.{6,}',
+                  required: true,
+                  title: 'at least 6 characters'
       .form-group.row
         .col-xs-10
           = f.label :question
