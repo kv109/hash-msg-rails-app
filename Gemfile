@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.3'
+ruby '2.4.2'
 
 gem 'coman', git: 'https://github.com/kv109/coman'
 
@@ -8,7 +8,6 @@ gem 'bootstrap-sass'
 gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
-gem 'high_voltage'
 gem 'pg'
 gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
@@ -18,7 +17,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
-gem 'wisper', '2.0.0.rc1'
 
 group :development do
   gem 'better_errors'
