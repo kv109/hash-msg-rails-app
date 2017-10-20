@@ -1,17 +1,18 @@
 class MessagesController < ApplicationController
   def new
-    @encrypted_message_create_form = EncryptedMessage::CreateForm.new
+    encrypted_message_create_form = EncryptedMessage::CreateForm.new
+    render :new, locals: { encrypted_message_create_form: encrypted_message_create_form}
   end
 
   def create
-    @encrypted_message_create_form = EncryptedMessage::CreateForm.new(create_params)
-    operation = EncryptedMessage::Create::FromCreateFormOperation.new(form: @encrypted_message_create_form)
-    response = operation.call
+    encrypted_message_create_form = EncryptedMessage::CreateForm.new(create_params)
+    operation                     = EncryptedMessage::Create::FromCreateFormOperation.new(form: encrypted_message_create_form)
+    response                      = operation.call
 
     response.ok do |encrypted_message|
       redirect_to encrypted_message_path(encrypted_message.uuid)
     end.error do
-      render :new
+      render :new, locals: { encrypted_message_create_form: encrypted_message_create_form }
     end
   end
 
