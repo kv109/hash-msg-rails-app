@@ -22,7 +22,11 @@ class Cipher
     end
 
     def generate_key(password:)
-      "#{password}#{Rails.application.secrets.fetch(:secret_key_base)}"[0..50]
+      Digest::SHA256.digest(password + salt)[0..15]
+    end
+
+    def salt
+      Rails.application.secrets.fetch(:secret_key_base)
     end
   end
 end
