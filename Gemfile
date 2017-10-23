@@ -3,7 +3,6 @@ ruby '2.4.2'
 
 gem 'coman', git: 'https://github.com/kv109/coman'
 
-gem 'binding_of_caller' # to make better_errors work
 gem 'bootstrap-sass'
 gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
@@ -20,6 +19,7 @@ gem 'uglifier', '>= 1.3.0'
 
 group :development do
   gem 'better_errors'
+  gem 'binding_of_caller' # to make better_errors work
   gem 'listen', '~> 3.0.5'
   gem 'hub', require: nil
   gem 'rails_layout'
