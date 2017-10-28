@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
   def new
     encrypted_message_create_form = EncryptedMessage::CreateForm.new
-    render :new, locals: { encrypted_message_create_form: encrypted_message_create_form}
+    render :new, locals: { encrypted_message_create_form: encrypted_message_create_form }
   end
 
   def create
@@ -17,17 +17,29 @@ class MessagesController < ApplicationController
   end
 
   def share
-    encrypted_message = EncryptedMessage.find(params.fetch(:uuid))
-    render :share,
-           locals: {
-             encrypted_message: encrypted_message,
-             uuid:              params.fetch(:uuid)
-           }
+    operation = EncryptedMessage::FindOperation.new(uuid: uuid_param)
+    response  = operation.call
+
+    response.ok do |encrypted_message|
+      render :share,
+             locals: {
+               encrypted_message: encrypted_message,
+               uuid:              uuid_param
+             }
+    end.error(404) do
+      render :not_found
+    end
   end
 
   def show_encrypted
-    encrypted_message = EncryptedMessage.find(params.fetch(:uuid))
-    render :show_encrypted, locals: { encrypted_message: encrypted_message }
+    operation = EncryptedMessage::FindOperation.new(uuid: uuid_param)
+    response  = operation.call
+
+    response.ok do |encrypted_message|
+      render :show_encrypted, locals: { encrypted_message: encrypted_message }
+    end.error(404) do
+      render :not_found
+    end
   end
 
   def show_decrypted
@@ -35,17 +47,14 @@ class MessagesController < ApplicationController
       encrypted_message_uuid: params.fetch(:uuid),
       password:               encrypted_message_params.fetch(:password)
     )
-    response = operation.call
+    response  = operation.call
 
-    response
-    .ok do |decrypted_content|
+    response.ok do |decrypted_content|
       @decrypted_content = decrypted_content
-    end
-    .error(404) do
-      @decrypted_content = nil
-    end
-    .error do |value, messages|
-      @error_message = messages.join(', ')
+    end.error(404) do
+      render :not_found
+    end.error do |value, messages|
+      render :error, locals: { error: messages.join(', ') }
     end
   end
 
@@ -57,5 +66,9 @@ class MessagesController < ApplicationController
 
   def encrypted_message_params
     params.require(:encrypted_message).permit(:password)
+  end
+
+  def uuid_param
+    params.require(:uuid)
   end
 end

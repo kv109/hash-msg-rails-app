@@ -21,9 +21,7 @@ feature 'Messages' do
       fill_in 'Password', with: 'password'
       submit_form
     end
-    within '.message-not-found' do
-      expect(page).to have_content('Message not found.')
-    end
+    expect(page).to have_content('Message not found')
 
     # With wrong password
     visit root_path
@@ -37,7 +35,7 @@ feature 'Messages' do
       fill_in 'Password', with: 'WRONG PASSWORD'
       submit_form
     end
-    expect(page).to have_selector('h5', text: 'wrong password')
+    expect(page).to have_content('wrong password')
 
     # With blank message
     visit root_path
