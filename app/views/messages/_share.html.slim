@@ -1,0 +1,28 @@
+.messages-share
+  .row
+    .col-xs-10.col-xs-offset-2
+      p
+        | Share this
+        '
+        a (href=encrypted_message_url(uuid) target="_blank") link
+        '
+        ' with a recipient:
+
+      pre.share-link (data-selectable)
+        = encrypted_message_url(uuid)
+
+      .btn.btn-default.btn-sm.copy-share-link data-clipboard-target=".share-link"
+        i.fa.fa-clipboard.fa-lg aria-hidden="true"
+        '
+        | Copy to clipboard
+
+      .top30
+        p
+          | Here is a preview of what the recipient will see:
+
+      .row
+        .col-xs-8
+          .preview.opacity75
+            = render 'messages/show_encrypted', encrypted_message: encrypted_message
+            javascript:
+              $('[autofocus]').attr({autofocus: false});

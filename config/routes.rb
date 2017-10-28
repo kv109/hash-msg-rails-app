@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   post 'messages' => 'messages#create', as: :messages
   get 'messages/:uuid/encrypted/' => 'messages#show_encrypted', as: :encrypted_message
   post 'messages/:uuid/decrypted/' => 'messages#show_decrypted', as: :decrypted_message
+  get 'messages/:uuid/share/' => 'messages#share', as: :share_message
 end

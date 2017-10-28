@@ -10,14 +10,24 @@ class MessagesController < ApplicationController
     response                      = operation.call
 
     response.ok do |encrypted_message|
-      redirect_to encrypted_message_path(encrypted_message.uuid)
+      redirect_to share_message_path(encrypted_message.uuid), notice: 'Message successfully saved'
     end.error do
       render :new, locals: { encrypted_message_create_form: encrypted_message_create_form }
     end
   end
 
+  def share
+    encrypted_message = EncryptedMessage.find(params.fetch(:uuid))
+    render :share,
+           locals: {
+             encrypted_message: encrypted_message,
+             uuid:              params.fetch(:uuid)
+           }
+  end
+
   def show_encrypted
-    @encrypted_message = EncryptedMessage.find(params.fetch(:uuid))
+    encrypted_message = EncryptedMessage.find(params.fetch(:uuid))
+    render :show_encrypted, locals: { encrypted_message: encrypted_message }
   end
 
   def show_decrypted

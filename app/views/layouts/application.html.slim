@@ -3,10 +3,11 @@ html
   head
     meta[name="viewport" content="width=device-width, initial-scale=1.0"]
     title
-      = content_for?(:title) ? yield(:title) : 'Hash Msg'
-    meta name="description" content="#{content_for?(:description) ? yield(:description) : 'Hash Msg'}"
+      = content_for?(:title) ? yield(:title) : 'NoteBurner'
+    meta name="description" content="#{content_for?(:description) ? yield(:description) : 'NoteBurner'}"
     == stylesheet_link_tag "application", :media => 'all'
     == javascript_include_tag 'application'
+    link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
     == csrf_meta_tags
   body
     header
