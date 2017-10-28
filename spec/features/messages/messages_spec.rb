@@ -6,22 +6,22 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: 'password'
-      click_button 'Submit'
+      submit_form
     end
+    visit encrypted_message_url
     within decrypt_form do
       fill_in 'Password', with: 'password'
-      click_button 'Submit'
+      submit_form
     end
     expect(page).to have_selector('pre', text: 'Foobar')
 
-    # Refresh page to check if message was deleted
+    # Try again to check if message was deleted
     page.driver.go_back
     within decrypt_form do
       fill_in 'Password', with: 'password'
-      click_button 'Submit'
+      submit_form
     end
     within '.message-not-found' do
-      screenshot_and_save_page
       expect(page).to have_content('Message not found.')
     end
 
@@ -30,11 +30,12 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: 'password'
-      click_button 'Submit'
+      submit_form
     end
+    visit encrypted_message_url
     within decrypt_form do
       fill_in 'Password', with: 'WRONG PASSWORD'
-      click_button 'Submit'
+      submit_form
     end
     expect(page).to have_selector('h5', text: 'wrong password')
 
@@ -43,7 +44,7 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: ''
       fill_in 'Password', with: 'password'
-      click_button 'Submit'
+      submit_form
     end
     expect_html5_validation_to_prevent_submit
 
@@ -52,7 +53,7 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: '12345'
-      click_button 'Submit'
+      submit_form
     end
     expect_html5_validation_to_prevent_submit
   end
@@ -65,7 +66,15 @@ feature 'Messages' do
     '#decrypt_encrypted_message_form'
   end
 
+  def encrypted_message_url
+    find('pre.share-link').text
+  end
+
   def expect_html5_validation_to_prevent_submit
     expect(current_path).to eql root_path
+  end
+
+  def submit_form
+    find('[type=submit]').click
   end
 end
