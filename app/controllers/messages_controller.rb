@@ -1,18 +1,18 @@
 class MessagesController < ApplicationController
   def new
-    encrypted_message_create_form = EncryptedMessage::CreateForm.new
-    render :new, locals: { encrypted_message_create_form: encrypted_message_create_form }
+    form = EncryptedMessage::CreateWithPasswordForm.new
+    render :new, locals: { form: form }
   end
 
   def create
-    encrypted_message_create_form = EncryptedMessage::CreateForm.new(create_params)
-    operation                     = EncryptedMessage::Create::FromCreateFormOperation.new(form: encrypted_message_create_form)
-    response                      = operation.call
+    form      = EncryptedMessage::CreateWithPasswordForm.new(create_params)
+    operation = EncryptedMessage::Create::FromCreateWithPasswordFormOperation.new(form: form)
+    response  = operation.call
 
     response.ok do |encrypted_message|
       redirect_to share_message_path(encrypted_message.uuid), notice: 'Message successfully saved'
     end.error do
-      render :new, locals: { encrypted_message_create_form: encrypted_message_create_form }
+      render :new, locals: { form: form }
     end
   end
 
@@ -61,7 +61,7 @@ class MessagesController < ApplicationController
   private
 
   def create_params
-    params.require(:encrypted_message_create_form).permit(:decrypted_content, :password, :question)
+    params.require(:encrypted_message_create_with_password_form).permit(:decrypted_content, :password, :question)
   end
 
   def encrypted_message_params

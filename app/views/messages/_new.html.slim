@@ -1,14 +1,14 @@
 .row
   .col-lg-10.col-lg-offset-2
-    = form_for encrypted_message_create_form, url: messages_path do |f|
+    = form_for form, url: messages_path do |f|
 
-      -if encrypted_message_create_form.errors.present?
+      -if form.errors.present?
         .row
           .col-lg-10
             #error_explanation
               h2 Error!
               ul
-                - encrypted_message_create_form.errors.full_messages.each do |msg|
+                - form.errors.full_messages.each do |msg|
                   li= msg
 
       .form-group.row.required

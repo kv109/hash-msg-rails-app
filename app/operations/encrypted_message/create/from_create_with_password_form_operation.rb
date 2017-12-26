@@ -1,4 +1,4 @@
-class EncryptedMessage::Create::FromCreateFormOperation
+class EncryptedMessage::Create::FromCreateWithPasswordFormOperation
   attr_reader :form
 
   def initialize(form:)

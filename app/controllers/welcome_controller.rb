@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
   def index
-    encrypted_message_create_form = EncryptedMessage::CreateForm.new
+    form = EncryptedMessage::CreateWithPasswordForm.new
     render :index,
-           locals: { encrypted_message_create_form: encrypted_message_create_form }
+           locals: { form: form }
   end
 end

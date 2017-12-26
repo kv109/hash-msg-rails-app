@@ -15,12 +15,8 @@ feature 'Messages' do
     end
     expect(page).to have_selector('pre', text: 'Foobar')
 
-    # Try again to check if message was deleted
-    page.driver.go_back
-    within decrypt_form do
-      fill_in 'Password', with: 'password'
-      submit_form
-    end
+    page.driver.refresh
+    save_screenshot('screenshot.png')
     expect(page).to have_content('Message not found')
 
     # With wrong password
@@ -57,11 +53,11 @@ feature 'Messages' do
   end
 
   def create_form
-    '#new_encrypted_message_create_form'
+    'form'
   end
 
   def decrypt_form
-    '#decrypt_encrypted_message_form'
+    'form'
   end
 
   def encrypted_message_url
