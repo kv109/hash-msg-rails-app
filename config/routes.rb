@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :api, defaults: { format: :json }, constraints: { subdomain: 'api' }, path: '/' do
+    post 'messages' => 'messages#create'
+  end
+
   root to: 'welcome#index'
 
   get 'messages/new' => 'messages#new'
