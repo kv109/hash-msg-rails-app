@@ -9,9 +9,28 @@ class Api::MessagesController < ActionController::API
     response  = operation.call
 
     response.ok do |encrypted_message|
-      render json: { curl: "curl -X POST -d password=ENTER_YOUR_PASSWORD_HERE #{api_decrypted_message_url(uuid: encrypted_message.uuid)}" }
+      render json: {
+        curl: "curl -X POST -d password=ENTER_YOUR_PASSWORD_HERE #{api_decrypted_message_url(uuid: encrypted_message.uuid)}",
+        uuid: encrypted_message.uuid
+      }
     end.error do
       render json: { error: form.errors }, status: 422
+    end
+  end
+
+  def show_decrypted
+    operation = EncryptedMessage::DecryptAndDestroyOperation.new(
+      encrypted_message_uuid: params[:uuid],
+      password:               params[:password]
+    )
+    response  = operation.call
+
+    response.ok do |decrypted_content|
+      render json: { decrypted_content: decrypted_content }
+    end.error(404) do
+      head 404
+    end.error do |value, messages|
+      render json: { error: messages.join(', ') }, status: 422
     end
   end
 end
