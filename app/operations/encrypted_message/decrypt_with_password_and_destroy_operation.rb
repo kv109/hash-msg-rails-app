@@ -8,10 +8,10 @@ class EncryptedMessage::DecryptWithPasswordAndDestroyOperation
 
   def call
     result = decrypt_operation.call
-    if result.ok?
+    result.ok do
       EncryptedMessage.destroy(encrypted_message_uuid)
       return result
-    else
+    end.error do
       return result
     end
   end

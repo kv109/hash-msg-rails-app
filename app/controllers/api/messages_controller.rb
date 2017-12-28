@@ -14,7 +14,7 @@ class Api::MessagesController < ActionController::API
         uuid: encrypted_message.uuid
       }
     end.error do
-      render json: { error: form.errors }, status: 422
+      render json: { error: form.errors.full_messages }, status: 422
     end
   end
 
@@ -30,7 +30,7 @@ class Api::MessagesController < ActionController::API
     end.error(404) do
       head 404
     end.error do |value, messages|
-      render json: { error: messages.join(', ') }, status: 422
+      render json: { error: messages }, status: 422
     end
   end
 end

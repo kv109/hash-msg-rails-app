@@ -7,6 +7,7 @@ describe 'messages', type: :request do
         req :post, 'messages'
         expect(response_code).to eq(422)
         expect(response_hash).to have_key('error')
+        expect(response_hash['error']).to eq(["Decrypted content can't be blank", "Decrypted content is too short (minimum is 6 characters)", "Password can't be blank", "Password is too short (minimum is 6 characters)"])
       end
     end
 
@@ -34,7 +35,7 @@ describe 'messages', type: :request do
 
         expect(response_code).to eq(422)
         expect(response_hash).to have_key('error')
-        expect(response_hash['error']).to eq('wrong password')
+        expect(response_hash['error']).to eq(['wrong password'])
       end
     end
 
