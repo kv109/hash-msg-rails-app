@@ -1,6 +1,6 @@
 class Cipher
   class << self
-    def decrypt(encrypted_content:, password:)
+    def decrypt_with_password(encrypted_content:, password:)
       cipher = cipher()
       cipher.decrypt
       cipher.key = generate_key(password: password)
@@ -8,7 +8,7 @@ class Cipher
     end
 
 
-    def encrypt(decrypted_content:, password:)
+    def encrypt_with_password(decrypted_content:, password:)
       cipher = cipher()
       cipher.encrypt
       cipher.key = generate_key(password: password)

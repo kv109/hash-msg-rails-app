@@ -1,4 +1,4 @@
-class EncryptedMessage::DecryptAndDestroyOperation
+class EncryptedMessage::DecryptWithPasswordAndDestroyOperation
   attr_reader :encrypted_message_uuid, :password
 
   def initialize(encrypted_message_uuid:, password:)
@@ -19,7 +19,7 @@ class EncryptedMessage::DecryptAndDestroyOperation
   private
 
   def decrypt_operation
-    EncryptedMessage::DecryptOperation.new(
+    EncryptedMessage::DecryptWithPasswordOperation.new(
       encrypted_message_uuid: encrypted_message_uuid,
       password:               password
     )

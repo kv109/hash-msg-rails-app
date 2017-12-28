@@ -54,10 +54,10 @@ RSpec.describe Cipher do
       it 'decrypts content' do
         contents_and_passwords.each do |content, password|
           encrypt_hash = { decrypted_content: content, password: password }
-          encrypted_content = described_class.encrypt(encrypt_hash)
+          encrypted_content = described_class.encrypt_with_password(encrypt_hash)
 
           decrypt_hash = { encrypted_content: encrypted_content, password: password }
-          decrypted_content_2 = described_class.decrypt(decrypt_hash)
+          decrypted_content_2 = described_class.decrypt_with_password(decrypt_hash)
           expect(decrypted_content_2).to eql content
         end
       end
@@ -119,10 +119,10 @@ RSpec.describe Cipher do
   end
 
   def expect_decryption_failure(decrypted_content, valid_password, invalid_password)
-    encrypted_content = described_class.encrypt(decrypted_content: decrypted_content, password: valid_password)
+    encrypted_content = described_class.encrypt_with_password(decrypted_content: decrypted_content, password: valid_password)
     expect(
       begin
-        described_class.decrypt(encrypted_content: encrypted_content, password: invalid_password)
+        described_class.decrypt_with_password(encrypted_content: encrypted_content, password: invalid_password)
       rescue OpenSSL::Cipher::CipherError
         nil
       end

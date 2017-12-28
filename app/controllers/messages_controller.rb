@@ -43,7 +43,7 @@ class MessagesController < ApplicationController
   end
 
   def show_decrypted
-    operation = EncryptedMessage::DecryptAndDestroyOperation.new(
+    operation = EncryptedMessage::DecryptWithPasswordAndDestroyOperation.new(
       encrypted_message_uuid: params.fetch(:uuid),
       password:               encrypted_message_params.fetch(:password)
     )

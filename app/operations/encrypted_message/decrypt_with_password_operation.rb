@@ -1,4 +1,4 @@
-class EncryptedMessage::DecryptOperation
+class EncryptedMessage::DecryptWithPasswordOperation
   def initialize(encrypted_message_uuid:, password:)
     @encrypted_message_uuid = encrypted_message_uuid
     @password = password
@@ -9,7 +9,10 @@ class EncryptedMessage::DecryptOperation
       return Coman::Response.error(code: 404, result: encrypted_message_uuid)
     end
 
-    ::DecryptOperation.new(encrypted_content: encrypted_message.encrypted_content, password: password).call
+    ::DecryptWithPasswordOperation.new(
+      encrypted_content: encrypted_message.encrypted_content,
+      password: password
+    ).call
   end
 
   private

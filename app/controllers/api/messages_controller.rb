@@ -19,7 +19,7 @@ class Api::MessagesController < ActionController::API
   end
 
   def show_decrypted
-    operation = EncryptedMessage::DecryptAndDestroyOperation.new(
+    operation = EncryptedMessage::DecryptWithPasswordAndDestroyOperation.new(
       encrypted_message_uuid: params[:uuid],
       password:               params[:password]
     )
