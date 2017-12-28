@@ -3,26 +3,89 @@ RSpec.describe Cipher do
   NON_ALPHANUMERIC_CHARS = %w(! @ # $ % ^ & * \( \) _ + - = [ ] ; ' \\ , . / : " | < > ?)
   CHARS = ALPHANUMERIC_CHARS + NON_ALPHANUMERIC_CHARS + (0..255).map {|n| "" <<n }
 
-  describe '#decrypt' do
-    let(:contents) do
-      contents = []
-      contents += [
-        ' ',
-        '   ',
-        'a',
-        'a ',
-        'a         ',
-        'aa',
-        'aaa',
-        'aaaa',
-        'ab',
-        'abc ',
-        'abcd ',
-        'Very important message.',
-        'Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message.',
-      ]
+  let(:contents) do
+    contents = []
+    contents += [
+      ' ',
+      '   ',
+      'a',
+      'a ',
+      'a         ',
+      'aa',
+      'aaa',
+      'aaaa',
+      'ab',
+      'abc ',
+      'abcd ',
+      'Very important message.',
+      'Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message. Very long message.',
+    ]
+  end
+
+  describe '#decrypt_with_token' do
+    context 'with valid token' do
+      it 'decrypts content' do
+        contents.each do |content|
+          encrypt_hash           = { decrypted_content: content }
+          encrypted_content_data = described_class.encrypt_with_token(encrypt_hash)
+          encrypted_content      = encrypted_content_data.fetch(:encrypted_content)
+          token                  = encrypted_content_data.fetch(:token)
+
+          decrypt_hash      = { encrypted_content: encrypted_content, token: token }
+          decrypted_content = described_class.decrypt_with_token(decrypt_hash)
+          expect(decrypted_content).to eql content
+        end
+      end
     end
 
+    context 'with invalid token' do
+      it 'fails to decrypt' do
+        contents.each do |content|
+          encrypt_hash           = { decrypted_content: content }
+          encrypted_content_data = described_class.encrypt_with_token(encrypt_hash)
+          encrypted_content      = encrypted_content_data.fetch(:encrypted_content)
+          token                  = encrypted_content_data.fetch(:token)
+
+          invalid_tokens = []
+
+          token.dup.tap do |invalid_token|
+            unless invalid_token[0] == invalid_token[1]
+              invalid_token[0] = invalid_token[1]
+              invalid_tokens << invalid_token
+            end
+          end
+
+          token.dup.tap do |invalid_token|
+            unless invalid_token[15] == invalid_token[0]
+              invalid_token[15] = invalid_token[0]
+              invalid_tokens << invalid_token
+            end
+          end
+
+          ALPHANUMERIC_CHARS.each do |char|
+            token.dup.tap do |invalid_token|
+              unless invalid_token[0] == char
+                invalid_token[0] = char
+                invalid_tokens << invalid_token
+              end
+            end
+          end
+
+          invalid_tokens.each do |invalid_token|
+            expect(
+              begin
+                described_class.decrypt_with_token(encrypted_content: encrypted_content, token: invalid_token)
+              rescue OpenSSL::Cipher::CipherError
+                nil
+              end
+            ).to_not eql(content), "valid token: [#{token}](length=#{token.length}), used token: [#{invalid_token}](length=#{invalid_token.length}), content: [#{content}]"
+          end
+        end
+      end
+    end
+  end
+
+  describe '#decrypt_with_password' do
     let(:contents_and_passwords) do
       contents_and_passwords = []
 

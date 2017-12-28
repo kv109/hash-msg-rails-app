@@ -7,12 +7,27 @@ class Cipher
       cipher.update(encrypted_content) + cipher.final
     end
 
+    def decrypt_with_token(encrypted_content:, token:)
+      cipher = cipher()
+      cipher.decrypt
+      cipher.key = token
+      cipher.update(encrypted_content) + cipher.final
+    end
 
     def encrypt_with_password(decrypted_content:, password:)
       cipher = cipher()
       cipher.encrypt
       cipher.key = generate_key(password: password)
       cipher.update(decrypted_content) + cipher.final
+    end
+
+    def encrypt_with_token(decrypted_content:)
+      cipher = cipher()
+      cipher.encrypt
+      token             = cipher.random_key
+      cipher.key        = token
+      encrypted_content = cipher.update(decrypted_content) + cipher.final
+      { encrypted_content: encrypted_content, token: token }
     end
 
     private
