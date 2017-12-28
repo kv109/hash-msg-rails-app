@@ -1,25 +1,27 @@
 class EncryptedMessage::DecryptWithPasswordOperation
   def initialize(encrypted_message_uuid:, password:)
     @encrypted_message_uuid = encrypted_message_uuid
-    @password = password
+    @password               = password
   end
 
   def call
-    if encrypted_message.nil?
-      return Coman::Response.error(code: 404, result: encrypted_message_uuid)
+    response = find_operation.call
+    response.ok do |encrypted_message|
+      # TODO: Fix Coman to return what evaluated block returned
+      return ::DecryptWithPasswordOperation.new(
+        encrypted_content: encrypted_message.encrypted_content,
+        password:          password
+      ).call
+    end.error do
+      return response
     end
-
-    ::DecryptWithPasswordOperation.new(
-      encrypted_content: encrypted_message.encrypted_content,
-      password: password
-    ).call
   end
 
   private
 
   attr_reader :encrypted_message_uuid, :password
 
-  def encrypted_message
-    EncryptedMessage.find(encrypted_message_uuid)
+  def find_operation
+    ::EncryptedMessage::FindOperation.new(uuid: encrypted_message_uuid)
   end
 end
