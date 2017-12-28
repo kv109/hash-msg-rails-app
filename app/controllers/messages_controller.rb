@@ -50,7 +50,7 @@ class MessagesController < ApplicationController
     response  = operation.call
 
     response.ok do |decrypted_content|
-      @decrypted_content = decrypted_content
+      render :show_decrypted, locals: { decrypted_content: decrypted_content }
     end.error(404) do
       render :not_found
     end.error do |value, messages|

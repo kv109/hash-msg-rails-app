@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'messages', type: :request do
   describe 'create message' do
     context 'with invalid params' do
-      it 'returns 422' do
+      it 'should return 422' do
         req :post, 'messages'
         expect(response_code).to eq(422)
         expect(response_hash).to have_key('error')
@@ -12,7 +12,7 @@ describe 'messages', type: :request do
     end
 
     context 'with valid params' do
-      it do
+      it 'should create encrypted message' do
         create_message('decrypted content', 'strong password')
         expect(response_hash).to have_key('curl')
         expect(response_hash['curl']).to match(/curl -X POST -d password/)

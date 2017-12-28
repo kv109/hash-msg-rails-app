@@ -1,7 +1,6 @@
 .row
   .col-lg-10.col-lg-offset-2
-    - if @decrypted_content
-        h6 Your decrypted message:
-        pre.top30 = @decrypted_content
-        h6.top30
-          | This message has already been deleted from our database. This is the last time anybody can see it.
+    h6 Your decrypted message:
+    pre.top30 = decrypted_content
+    h6.top30
+      | This message has already been deleted from our database. This is the last time anybody can see it.
