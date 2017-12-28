@@ -1,7 +1,7 @@
 RSpec.describe Cipher do
-  ALPHANUMERIC_CHARS = %w(0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n o p q r s t u v w x y z)
+  ALPHANUMERIC_CHARS     = %w(0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n o p q r s t u v w x y z)
   NON_ALPHANUMERIC_CHARS = %w(! @ # $ % ^ & * \( \) _ + - = [ ] ; ' \\ , . / : " | < > ?)
-  CHARS = ALPHANUMERIC_CHARS + NON_ALPHANUMERIC_CHARS + (0..255).map {|n| "" <<n }
+  CHARS                  = ALPHANUMERIC_CHARS + NON_ALPHANUMERIC_CHARS + (0..255).map { |n| "" << n }
 
   let(:contents) do
     contents = []
@@ -101,9 +101,9 @@ RSpec.describe Cipher do
     let(:passwords) do
       passwords = []
       # random_passwords = [3, 5, 10, 50, 200].map { |n| Base64.encode64((0...n).map { (rand(255)).chr }.join) }
-      random_passwords = [3, 5, 10, 15, 50, 200].map { |n| ((0...n).map { (65+rand(26)).chr }.join) }
-      passwords += random_passwords
-      passwords += [
+      random_passwords = [3, 5, 10, 15, 50, 200].map { |n| ((0...n).map { (65 + rand(26)).chr }.join) }
+      passwords        += random_passwords
+      passwords        += [
         'password',
         ' ',
         '     ',
@@ -116,10 +116,10 @@ RSpec.describe Cipher do
     context 'with valid password' do
       it 'decrypts content' do
         contents_and_passwords.each do |content, password|
-          encrypt_hash = { decrypted_content: content, password: password }
+          encrypt_hash      = { decrypted_content: content, password: password }
           encrypted_content = described_class.encrypt_with_password(encrypt_hash)
 
-          decrypt_hash = { encrypted_content: encrypted_content, password: password }
+          decrypt_hash        = { encrypted_content: encrypted_content, password: password }
           decrypted_content_2 = described_class.decrypt_with_password(decrypt_hash)
           expect(decrypted_content_2).to eql content
         end
@@ -169,7 +169,7 @@ RSpec.describe Cipher do
           contents_and_passwords.each do |content, password|
             CHARS.each do |char|
               invalid_password = password.dup
-              first_char = invalid_password[0]
+              first_char       = invalid_password[0]
               if char != first_char
                 invalid_password[0] = char
                 expect_decryption_failure(content, password, invalid_password)
