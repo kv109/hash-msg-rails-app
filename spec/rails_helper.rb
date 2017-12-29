@@ -12,6 +12,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
 
+  # TODO: set only in js: true tests
   if ENV_SELENIUM_HOST
     Capybara.javascript_driver = :selenium_remote_firefox
     Capybara.default_max_wait_time = 1.second
