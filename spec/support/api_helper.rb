@@ -10,7 +10,7 @@ module ApiHelper
   end
 
   def req(method, path, options = {})
-    url = "http://api.example.com/#{path}.json"
+    url = "http://example.com/api/#{path}.json"
     send(method, url, options)
   end
 end

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  namespace :api, defaults: { format: :json }, constraints: { subdomain: 'api' }, path: '/' do
+  namespace :api, defaults: { format: :json }, path: '/api' do
     post 'messages' => 'messages#create'
     post 'messages/:uuid/' => 'messages#show_decrypted', as: :decrypted_message
   end

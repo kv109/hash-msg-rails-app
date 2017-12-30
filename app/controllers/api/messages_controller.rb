@@ -1,4 +1,4 @@
-class Api::MessagesController < ActionController::API
+class Api::MessagesController < ApiController
   def create
     form = EncryptedMessage::CreateWithPasswordForm.new(
       decrypted_content: params[:decrypted_content],
