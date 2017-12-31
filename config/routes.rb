@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   namespace :api, defaults: { format: :json }, path: '/api' do
     post 'messages' => 'messages#create'
-    post 'messages/:uuid/' => 'messages#show_decrypted', as: :decrypted_message
+    get 'messages/:uuid/:token' => 'messages#show_decrypted'
+    post 'messages/:uuid/' => 'messages#show_decrypted'
   end
 
   root to: 'welcome#index'

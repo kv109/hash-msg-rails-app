@@ -12,7 +12,7 @@ class EncryptedMessage::Create::FromCreateWithPasswordFormOperation
 
     operation = EncryptWithPasswordOperation.new(
       decrypted_content: form.decrypted_content,
-      password: form.password
+      password:          form.password
     )
 
     response = operation.call
@@ -24,7 +24,7 @@ class EncryptedMessage::Create::FromCreateWithPasswordFormOperation
         question:          form.question
       )
       if encrypted_message.save
-        Coman::Response.ok(result: encrypted_message)
+        Coman::Response.ok(result: { uuid: encrypted_message.uuid })
       else
         Coman::Response.error(result: encrypted_message, messages: encrypted_message.errors.full_messages)
       end

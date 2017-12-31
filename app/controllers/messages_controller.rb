@@ -9,8 +9,8 @@ class MessagesController < ApplicationController
     operation = EncryptedMessage::Create::FromCreateWithPasswordFormOperation.new(form: form)
     response  = operation.call
 
-    response.ok do |encrypted_message|
-      redirect_to share_message_path(encrypted_message.uuid), notice: 'Message successfully saved'
+    response.ok do |encrypted_message_data|
+      redirect_to share_message_path(encrypted_message_data.fetch(:uuid)), notice: 'Message successfully saved'
     end.error do
       render :new, locals: { form: form }
     end

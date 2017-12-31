@@ -10,7 +10,7 @@ class EncryptedMessage
       encrypted_content = Base64.decode64(hash.fetch('encrypted_content'))
       EncryptedMessage.new(
         encrypted_content: encrypted_content,
-        question:          hash.fetch('question')
+        question:          hash['question']
       )
     end
 
