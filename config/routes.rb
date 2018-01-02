@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  if Rails.env.production?
+    constraints(:host => /^(?!www\.noteburn\.org)/i) do
+      match "/(*path)" => redirect {
+        |params, req| "https://www.noteburn.org/#{params[:path]}"
+      },  via: [:get, :post]
+    end
+  end
+
   namespace :api, defaults: { format: :json }, path: '/api' do
     post 'messages' => 'messages#create'
     get 'messages/:uuid/:token' => 'messages#show_decrypted'
