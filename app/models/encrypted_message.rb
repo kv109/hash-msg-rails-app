@@ -1,4 +1,7 @@
 class EncryptedMessage
+  HALF_HOUR = 60 * 30
+  private_constant :HALF_HOUR
+
   include ActiveModel::Model
 
   attr_accessor :encrypted_content, :question, :uuid
@@ -34,13 +37,13 @@ class EncryptedMessage
   def to_json
     {
       encrypted_content: Base64.encode64(encrypted_content),
-      question: question
+      question:          question
     }.to_json
   end
 
   def save
     self.uuid = SecureRandom.hex(13)
-    storage.set(self.uuid, self.to_json)
+    storage.set(self.uuid, self.to_json, ex: HALF_HOUR)
   end
 
   private
