@@ -1,0 +1,27 @@
+= content_for :title, 'Privacy policy'
+h3 Privacy policy
+
+ul
+  li
+    = render 'components/brand_name'
+    |  store messages only in
+    strong  encrypted
+    |  form.
+  li
+    | When message is created with a password, it can be
+    strong  only
+    |  encrypted with this password.
+    = render 'components/brand_name'
+    |  doesn't store passwords.
+  li
+    | When message is created without a password, it is encrypted with automatically generated token.
+    br
+    |  Token is displayed only once, immediately after creating a message.
+    br
+    |  Such message can be
+    strong  only
+    |  encrypted with this token.
+    = render 'components/brand_name'
+    |  doesn't store tokens.
+  li Messages expire after 30 minutes.
+  li All data traffic on #{request.domain} is encrypted.
