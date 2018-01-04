@@ -27,8 +27,4 @@
                   pattern: '.{6,}',
                   required: true,
                   title: 'at least 6 characters'
-      .form-group.row
-        .col-xs-10
-          = f.label :question, 'Hint'
-          = f.text_field :question, class: 'form-control', placeholder: 'Hint to password (for example "Your last name")'
       button.btn.btn-success type="submit" Submit
