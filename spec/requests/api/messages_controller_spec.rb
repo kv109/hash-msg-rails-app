@@ -65,6 +65,9 @@ describe 'messages', type: :request do
           req :post, "messages/#{uuid}", password: password
           expect(response_hash).to have_key('decrypted_content')
           expect(response_hash['decrypted_content']).to eq(decrypted_content)
+
+          req :post, "messages/#{uuid}", password: password
+          expect(response_code).to eq(404)
         end
       end
     end
@@ -94,6 +97,9 @@ describe 'messages', type: :request do
           req :get, "messages/#{uuid}/#{token}"
           expect(response_hash).to have_key('decrypted_content')
           expect(response_hash['decrypted_content']).to eq(decrypted_content)
+
+          req :get, "messages/#{uuid}/#{token}"
+          expect(response_code).to eq(404)
         end
       end
     end
