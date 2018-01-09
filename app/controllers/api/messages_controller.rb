@@ -18,7 +18,11 @@ class Api::MessagesController < ApiController
     response  = operation.call
 
     response.ok do |decrypted_content|
-      render json: { decrypted_content: decrypted_content }
+      if params[:output] == 'raw'
+        render plain: decrypted_content
+      else
+        render json: { decrypted_content: decrypted_content }
+      end
     end.error(404) do
       head 404
     end.error do |_value, messages|
