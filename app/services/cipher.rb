@@ -24,7 +24,7 @@ class Cipher
     def encrypt_with_token(decrypted_content:)
       cipher = cipher()
       cipher.encrypt
-      token             = SecureRandom.urlsafe_base64
+      token             = SecureRandom.hex(8)
       cipher.key        = generate_key(string: token)
       encrypted_content = cipher.update(decrypted_content) + cipher.final
       { encrypted_content: encrypted_content, token: token }
