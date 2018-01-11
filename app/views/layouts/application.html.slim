@@ -4,7 +4,7 @@ html
     meta[name="viewport" content="width=device-width, initial-scale=1.0"]
     title
       = content_for?(:title) ? yield(:title) : 'NoteBurn: self-destructing messages'
-    meta name="description" content="#{content_for?(:description) ? yield(:description) : 'NoteBurn: self-destructing messages'}"
+    meta name="description" content="#{content_for?(:description) ? yield(:description) : 'Write a message, share a link, the message will self-destruct after being read.'}"
     == stylesheet_link_tag "application", :media => 'all'
     == javascript_include_tag 'application'
     link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
