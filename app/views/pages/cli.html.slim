@@ -1,0 +1,29 @@
+.page-cli
+  = content_for :title, 'NoteBurn Command Line Interface'
+
+  h3
+    = render 'components/brand_name'
+    '
+    ' CLI
+
+  p
+    code noteburn-cli
+    '
+    | is a command line interface which uses
+    = render 'components/brand_name'
+    '
+    | API to share sensitive data easily and safely through self-destructing messages.
+  p Sharing credentials? Passwords, AWS keys, API tokens?
+  p
+    | Don't use browser. Leave no traces in your IM.
+    '
+    = link_to 'Download', 'https://www.npmjs.com/package/noteburn-cli'
+    '
+    code noteburn-cli
+    '
+    | npm package.
+
+  .top30
+    = image_tag 'encrypt-file.gif'
+  .top30
+    = image_tag 'encrypt-text.gif'
