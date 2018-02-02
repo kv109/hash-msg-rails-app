@@ -92,7 +92,7 @@ describe 'messages', type: :request do
 
           create_message_with_token(decrypted_content)
           token = response_hash.fetch('token')
-          uuid = response_hash.fetch('uuid')
+          uuid  = response_hash.fetch('uuid')
 
           req :get, "messages/#{uuid}/#{token}"
           expect(response_hash).to have_key('decrypted_content')
@@ -100,6 +100,21 @@ describe 'messages', type: :request do
 
           req :get, "messages/#{uuid}/#{token}"
           expect(response_code).to eq(404)
+        end
+
+        context 'with output=raw' do
+          it 'should return decrypted content as plain text' do
+            decrypted_content = 'decrypted content'
+
+            create_message_with_token(decrypted_content)
+            token = response_hash.fetch('token')
+            uuid  = response_hash.fetch('uuid')
+
+            req :get, "messages/#{uuid}/#{token}", output: :raw
+            expect(response_body).to eq(decrypted_content)
+
+            expect(last_response.headers['Content-Type']).to eq('text/plain; charset=utf-8')
+          end
         end
       end
     end
