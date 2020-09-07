@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.4.2'
+ruby '2.6.3'
 
 gem 'coman', git: 'https://github.com/kv109/coman'
 
