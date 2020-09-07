@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+=begin
   if Rails.env.production?
     constraints(:host => /^(?!www\.noteburn\.org)/i) do
       match "/(*path)" => redirect {
@@ -6,6 +7,7 @@ Rails.application.routes.draw do
       },  via: [:get, :post]
     end
   end
+=end
 
   namespace :api, defaults: { format: :json }, path: '/api' do
     post 'messages' => 'messages#create'
