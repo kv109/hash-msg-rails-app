@@ -9,6 +9,7 @@ require 'rspec/rails'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
+DatabaseCleaner.url_whitelist = ['postgres://hash-msg_test:hash-msg_test@postgres-test:5432/hash-msg_test']
 
 RSpec.configure do |config|
 
