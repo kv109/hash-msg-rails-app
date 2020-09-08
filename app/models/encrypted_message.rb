@@ -1,5 +1,5 @@
 class EncryptedMessage
-  HALF_HOUR = 60 * 30
+  HALF_HOUR = 60 * 120
   private_constant :HALF_HOUR
 
   include ActiveModel::Model
