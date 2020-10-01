@@ -1,6 +1,6 @@
 class EncryptedMessage
-  HALF_HOUR = 60 * 120
-  private_constant :HALF_HOUR
+  EIGHT_HOURS = 60 * 60 * 8
+  private_constant :EIGHT_HOURS
 
   include ActiveModel::Model
 
@@ -43,7 +43,7 @@ class EncryptedMessage
 
   def save
     self.uuid = SecureRandom.hex(13)
-    storage.set(self.uuid, self.to_json, ex: HALF_HOUR)
+    storage.set(self.uuid, self.to_json, ex: EIGHT_HOURS)
   end
 
   private
