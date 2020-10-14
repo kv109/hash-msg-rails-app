@@ -1,5 +1,5 @@
 class EncryptedMessage
-  THIRTY_SIX_HOURS = 60 * 60 * 8
+  THIRTY_SIX_HOURS = 60 * 60 * 36
   private_constant :THIRTY_SIX_HOURS
 
   include ActiveModel::Model
