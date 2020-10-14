@@ -1,16 +1,13 @@
 .row
-  .col-lg-10.col-lg-offset-2
-    h4 To decode message, please enter the password
-    - if encrypted_message.question.present?
+  .col-12.col-md-6.offset-md-2
+    / - if encrypted_message.question.present?
       P Following question or hint can be helpful: #{encrypted_message.question}
     = form_for(encrypted_message, html: { id: 'decrypt_encrypted_message_form' }, url: decrypted_message_path) do |f|
-      .form-group.row
-        .col-xs-10
-          = f.label :password, 'Password:'
-          = f.password_field :password, required: true, class: 'form-control', autofocus: true
-      button.btn.btn-success type="submit" Read and destroy
+      .form-group
+        = f.label :password, 'To decode the message, please enter the password:'
+        = f.password_field :password, required: true, class: 'form-control', autofocus: true
+      .text-center
+        button.btn.btn-primary type="submit" Read and destroy
 
-.row
-  .col-lg-10.col-lg-offset-2
     hr.hr
-    p If you don't have the password, please contact the person who sent you this link
+    p.small.text-secondary If you don't have the password, please contact the person who sent you this link.

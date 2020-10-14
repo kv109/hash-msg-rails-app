@@ -1,8 +1,8 @@
 .row
-  .col-lg-10.col-lg-offset-2
+  .col-12.col-md-10.offset-md-1
     = form_for form, url: messages_path do |f|
 
-      -if form.errors.present?
+      - if form.errors.present?
         .row
           .col-lg-10
             #error_explanation
@@ -11,20 +11,27 @@
                 - form.errors.full_messages.each do |msg|
                   li= msg
 
-      .form-group.row.required
-        .col-xs-10
-          = f.label :decrypted_content, 'Message', class: 'control-label'
-          = f.text_area :decrypted_content,
-                  autofocus: true,
-                  class: 'form-control',
-                  required: true,
-                  rows: 5
-      .form-group.row.required
-        .col-xs-10
-          = f.label :password, 'Password (at least 6 characters)', class: 'control-label'
-          = f.password_field :password,
-                  class: 'form-control',
-                  pattern: '.{6,}',
-                  required: true,
-                  title: 'at least 6 characters'
-      button.btn.btn-success type="submit" Submit
+      .form-group.required
+        = f.label :decrypted_content, 'Message', class: 'control-label'
+        = f.text_area :decrypted_content,
+                autofocus: true,
+                class: 'form-control',
+                required: true,
+                rows: 5
+
+      .form-group.required
+        = f.label :password, 'Password (at least 6 characters)', class: 'control-label mb-0 pb-0'
+        .p.text-secondary.small
+          | Your recipient(s) will need this password to decrypt your message
+        = f.password_field :password,
+                class: 'form-control',
+                pattern: '.{6,}',
+                required: true,
+                title: 'at least 6 characters'
+
+      / .form-group
+        = f.label :expires_in, 'Expires after', class: 'control-label mr-2'
+        = f.select :expires_in, %w(2 8 36).map { |hours| "#{hours} hours" }, {}, class: 'form-control'
+
+      .text-center
+        button.btn.btn-primary type="submit" Create message!

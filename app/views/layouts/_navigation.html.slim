@@ -1,13 +1,12 @@
-/ navigation styled for Bootstrap 3.0
-nav.navbar.navbar-inverse.navbar-fixed-top
-  .container
-    .navbar-header
-      button.navbar-toggle[type="button" data-toggle="collapse" data-target=".header-collapse"]
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      = link_to 'Home', root_path, class: 'navbar-brand'
-    .collapse.navbar-collapse.header-collapse
-      ul.nav.navbar-nav
-        == render 'layouts/navigation_links'
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  = link_to 'Home', root_path, class: 'navbar-brand'
+  button.navbar-toggler aria-controls="navbarSupportedContent" aria-expanded="false" aria-label=("Toggle navigation") data-target="#navbarSupportedContent" data-toggle="collapse" type="button"
+    span.navbar-toggler-icon
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        = link_to 'New message', new_message_path, class: 'nav-link'
+      / li.nav-item
+        = link_to 'NoteBurn CLI', "https://www.npmjs.com/package/noteburn-cli", class: 'nav-link'
+      / li.nav-item
+        = link_to 'NoteBurn API', 'https://github.com/kv109/hash-msg/wiki/API', target: '_blank', class: 'nav-link'
