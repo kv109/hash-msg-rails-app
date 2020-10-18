@@ -1,6 +1,7 @@
 .row
-  .col-lg-10.col-lg-offset-2
+  .col-12.col-md-6.offset-md-2
     h6 Your decrypted message:
-    pre.top30 = decrypted_content
-    h6.top30
+    pre style="border 1px solid gray; padding: 3px; background-color: #eee"
+      = decrypted_content
+    h6
       | This message has already been deleted from our database. This is the last time anybody can see it.

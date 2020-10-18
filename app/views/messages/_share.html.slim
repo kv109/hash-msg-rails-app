@@ -1,26 +1,12 @@
-.messages-share
-  .row
-    .col-xs-10.col-xs-offset-2
-      p
-        | Share this
-        '
-        a (href=encrypted_message_url(uuid) target="_blank") link
-        '
-        ' with a recipient:
+.row
+  .col-12.col-md-6.offset-md-2
+    p
+      | Share this link and the password with the recipient(s):
 
-      pre.share-link (data-selectable)
-        = encrypted_message_url(uuid)
+    p.share-link (data-selectable)
+      = link_to encrypted_message_url(uuid), encrypted_message_url(uuid)
 
-      .btn.btn-default.btn-sm.copy-share-link data-clipboard-target=".share-link"
-        i class="demo-icon icon-docs"
-        '
-        | Copy to clipboard
-
-      .top30
-        p
-          | Here is a preview of what the recipient will see:
-
-      .row
-        .col-xs-8
-          .preview.opacity75
-            = render 'messages/show_encrypted', encrypted_message: encrypted_message
+    .button.mt-2.btn.btn-sm.btn-outline-primary.copy-share-link data-clipboard-target=".share-link"
+      i class="demo-icon icon-docs"
+      '
+      | Copy link to clipboard

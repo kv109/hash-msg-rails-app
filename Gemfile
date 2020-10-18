@@ -3,7 +3,7 @@ ruby '2.6.3'
 
 gem 'coman', git: 'https://github.com/kv109/coman'
 
-gem 'bootstrap-sass'
+gem 'bootstrap'
 gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
