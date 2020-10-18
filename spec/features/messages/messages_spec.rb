@@ -10,7 +10,7 @@ feature 'Messages' do
     end
     visit encrypted_message_url
     within decrypt_form do
-      fill_in 'Password', with: 'password'
+      fill_in 'encrypted_message_password', with: 'password'
       submit_form
     end
     expect(page).to have_selector('pre', text: 'Foobar')
@@ -28,7 +28,7 @@ feature 'Messages' do
     end
     visit encrypted_message_url
     within decrypt_form do
-      fill_in 'Password', with: 'WRONG PASSWORD'
+      fill_in 'encrypted_message_password', with: 'WRONG PASSWORD'
       submit_form
     end
     expect(page).to have_content('wrong password')
@@ -61,7 +61,7 @@ feature 'Messages' do
   end
 
   def encrypted_message_url
-    find('pre.share-link').text
+    find('p.share-link').text
   end
 
   def expect_html5_validation_to_prevent_submit
