@@ -61,7 +61,14 @@ class MessagesController < ApplicationController
   private
 
   def create_params
-    params.require(:encrypted_message_create_with_password_form).permit(:decrypted_content, :password, :question)
+    params
+      .require(:encrypted_message_create_with_password_form)
+      .permit(
+        :decrypted_content,
+        :expires_in_hours,
+        :password,
+        :question
+      )
   end
 
   def encrypted_message_params

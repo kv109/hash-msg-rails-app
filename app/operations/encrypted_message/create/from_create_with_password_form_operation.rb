@@ -21,6 +21,7 @@ class EncryptedMessage::Create::FromCreateWithPasswordFormOperation
       encrypted_content = response.result
       encrypted_message = EncryptedMessage.new(
         encrypted_content: encrypted_content,
+        expires_in_hours:  form.expires_in_hours,
         question:          form.question
       )
       if encrypted_message.save
