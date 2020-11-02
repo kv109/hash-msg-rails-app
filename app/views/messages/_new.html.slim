@@ -29,9 +29,9 @@
                 required: true,
                 title: 'at least 6 characters'
 
-      / .form-group
-        = f.label :expires_in, 'Expires after', class: 'control-label mr-2'
-        = f.select :expires_in, %w(2 8 36).map { |hours| "#{hours} hours" }, {}, class: 'form-control'
+      .form-group
+        = f.label :expires_in_hours, 'Expires after', class: 'control-label mr-2'
+        = f.select :expires_in_hours, %w(2 8 36).map { |hours| "#{hours} hours" }, {}, class: 'form-control'
 
       .text-center
         button.btn.btn-primary type="submit" Create message!

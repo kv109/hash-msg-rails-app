@@ -1,10 +1,10 @@
 class EncryptedMessage
-  THIRTY_SIX_HOURS = 60 * 60 * 36
-  private_constant :THIRTY_SIX_HOURS
+  DEFAULT_EXPIRES_IN_HOURS = 36
+  private_constant :DEFAULT_EXPIRES_IN_HOURS
 
   include ActiveModel::Model
 
-  attr_accessor :encrypted_content, :question, :uuid
+  attr_accessor :encrypted_content, :expires_in_hours, :question, :uuid
 
   validates! :encrypted_content, presence: true
 
@@ -34,6 +34,12 @@ class EncryptedMessage
     end
   end
 
+  def expires_in
+    self.expires_in_hours = self.expires_in_hours.to_i
+    self.expires_in_hours = DEFAULT_EXPIRES_IN_HOURS if self.expires_in_hours.zero?
+    self.expires_in_hours * 60 * 60
+  end
+
   def to_json
     {
       encrypted_content: Base64.encode64(encrypted_content),
@@ -43,7 +49,7 @@ class EncryptedMessage
 
   def save
     self.uuid = SecureRandom.hex(13)
-    storage.set(self.uuid, self.to_json, ex: THIRTY_SIX_HOURS)
+    storage.set(self.uuid, self.to_json, ex: expires_in)
   end
 
   private

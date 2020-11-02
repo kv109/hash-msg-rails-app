@@ -16,7 +16,6 @@ feature 'Messages' do
     expect(page).to have_selector('pre', text: 'Foobar')
 
     page.driver.refresh
-    save_screenshot('screenshot.png')
     expect(page).to have_content('Message not found')
 
     # With wrong password
@@ -50,6 +49,45 @@ feature 'Messages' do
       submit_form
     end
     expect_html5_validation_to_prevent_submit
+  end
+
+  scenario 'With expires after set to "2 hours"' do
+    expect(RedisHM).to(receive(:set).with(instance_of(String), instance_of(String), ex: 2 * 60 * 60))
+
+    visit root_path
+
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: 'password'
+      select '2 hours', from: 'Expires after'
+      submit_form
+    end
+  end
+
+  scenario 'With expires after set to "8 hours"' do
+    expect(RedisHM).to(receive(:set).with(instance_of(String), instance_of(String), ex: 8 * 60 * 60))
+
+    visit root_path
+
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: 'password'
+      select '8 hours', from: 'Expires after'
+      submit_form
+    end
+  end
+
+  scenario 'With expires after set to "36 hours"' do
+    expect(RedisHM).to(receive(:set).with(instance_of(String), instance_of(String), ex: 36 * 60 * 60))
+
+    visit root_path
+
+    within create_form do
+      fill_in 'Message', with: 'Foobar'
+      fill_in 'Password', with: 'password'
+      select '36 hours', from: 'Expires after'
+      submit_form
+    end
   end
 
   def create_form
