@@ -30,8 +30,12 @@
                 title: 'at least 6 characters'
 
       .form-group
-        = f.label :expires_in_hours, 'Expires after', class: 'control-label mr-2'
+        = f.label :expires_in_hours, 'Link expires in', class: 'control-label mr-2 mb-0 pb-0'
+        .p.text-secondary.small
+          | Link to your message will automatically expire after this time
         = f.select :expires_in_hours, %w(2 8 36).map { |hours| "#{hours} hours" }, {}, class: 'form-control'
 
       .text-center
         button.btn.btn-primary type="submit" Create message!
+
+.m-5
