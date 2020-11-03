@@ -59,7 +59,7 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: 'password'
-      select '2 hours', from: 'Expires after'
+      select '2 hours', from: 'Link expires in'
       submit_form
     end
   end
@@ -72,7 +72,7 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: 'password'
-      select '8 hours', from: 'Expires after'
+      select '8 hours', from: 'Link expires in'
       submit_form
     end
   end
@@ -85,7 +85,7 @@ feature 'Messages' do
     within create_form do
       fill_in 'Message', with: 'Foobar'
       fill_in 'Password', with: 'password'
-      select '36 hours', from: 'Expires after'
+      select '36 hours', from: 'Link expires in'
       submit_form
     end
   end
