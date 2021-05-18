@@ -9,7 +9,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'high_voltage', '~> 3.0.0' # static pages
 gem 'pg'
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.0.3'
 gem 'redis'
 gem 'simple_form'
